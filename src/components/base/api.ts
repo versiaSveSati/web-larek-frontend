@@ -1,9 +1,19 @@
+// api.ts
+
 export type ApiListResponse<Type> = {
     total: number,
     items: Type[]
 };
 
 export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';
+
+export interface ProductAPI {
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    imageUrl: string;
+}
 
 export class Api {
     readonly baseUrl: string;
