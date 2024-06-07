@@ -59,17 +59,32 @@ getProductById(id: string): Product | undefined — возвращает про�
 typescript
 
 class AppData {
-    products: Product[] = [];
-    cart: Cart = new Cart();
+    constructor(
+        public productData: ProductData,
+        public cartData: CartData
+    ) {}
 
     addProduct(product: Product): void {
-        this.products.push(product);
+        this.productData.addProduct(product);
     }
 
     getProductById(id: string): Product | undefined {
-        return this.products.find(product => product.id === id);
+        return this.productData.getProductById(id);
+    }
+
+    addItemToCart(productId: string, quantity: number): void {
+        this.cartData.addItem(productId, quantity);
+    }
+
+    removeItemFromCart(productId: string): void {
+        this.cartData.removeItem(productId);
+    }
+
+    clearCart(): void {
+        this.cartData.clear();
     }
 }
+
 Класс Product
 Класс Product представляет товар в магазине.
 
