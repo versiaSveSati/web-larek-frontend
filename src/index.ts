@@ -10,7 +10,7 @@ const emitter = new EventEmitter();
 document.addEventListener('DOMContentLoaded', () => {
     const app = document.getElementById('app');
     if (app) {
-        api.fetchData<ProductView[]>('/products') // замените '/products' на ваш реальный эндпоинт
+        api.fetchData<ProductView[]>('/products') 
             .then(products => {
                 products.forEach((product: ProductView) => {
                     const productComponent = new ProductComponent(emitter, product);
