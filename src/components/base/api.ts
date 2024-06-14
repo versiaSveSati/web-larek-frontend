@@ -1,19 +1,9 @@
-// api.ts
-
 export type ApiListResponse<Type> = {
     total: number,
     items: Type[]
 };
 
 export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';
-
-export interface ProductAPI {
-    id: string;
-    name: string;
-    description: string;
-    price: number;
-    imageUrl: string;
-}
 
 export class Api {
     readonly baseUrl: string;
@@ -25,28 +15,43 @@ export class Api {
             headers: {
                 'Content-Type': 'application/json',
                 ...(options.headers as object ?? {})
-            }
+            },
+            ...options,  // добавляем другие опции, переданные при инициализации
         };
     }
 
-    protected handleResponse(response: Response): Promise<object> {
+    protected handleResponse(response: Response): Promise<any> {
         if (response.ok) return response.json();
         else return response.json()
             .then(data => Promise.reject(data.error ?? response.statusText));
     }
 
-    get(uri: string) {
+    get<T>(uri: string): Promise<T> {
         return fetch(this.baseUrl + uri, {
             ...this.options,
             method: 'GET'
         }).then(this.handleResponse);
     }
 
-    post(uri: string, data: object, method: ApiPostMethods = 'POST') {
+    post<T>(uri: string, data: object, method: ApiPostMethods = 'POST'): Promise<T> {
         return fetch(this.baseUrl + uri, {
             ...this.options,
             method,
             body: JSON.stringify(data)
         }).then(this.handleResponse);
     }
+
+    put<T>(uri: string, data: object): Promise<T> {
+        return this.post(uri, data, 'PUT');
+    }
+
+    delete<T>(uri: string): Promise<T> {
+        return this.post(uri, {}, 'DELETE');
+    }
+
+    fetchData<T>(uri: string): Promise<T> {
+        return this.get<T>(uri);
+    }
 }
+
+export const api = new Api('https://larek-api.nomoreparties.co/product/api/weblarek'); 

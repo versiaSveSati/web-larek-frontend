@@ -15,6 +15,6 @@ export interface CartItem {
 export interface Cart {
     addItem(productId: string, quantity: number): void;
     removeItem(productId: string): void;
-    getItems(): CartItem[];
+    getItems(): Map<string, number>;
     clear(): void;
 }
